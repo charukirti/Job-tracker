@@ -7,11 +7,15 @@ import {
 } from "@clerk/nextjs";
 import { ModeToggle } from "../toggler";
 import { Button } from "../ui/button";
+import Link from "next/link";
 
 export default function Header() {
   return (
     <header className="flex items-center justify-between">
-      <h1 className="text-2xl font-extrabold">Job Tracker</h1>
+      <Link href={"/"}>
+        {" "}
+        <h1 className="text-2xl font-extrabold">Job Tracker</h1>
+      </Link>
 
       <nav className="flex items-center gap-2">
         <SignedOut>
