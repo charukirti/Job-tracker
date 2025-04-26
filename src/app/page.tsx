@@ -31,7 +31,7 @@ export default async function Home() {
           </p>
 
           <Button className="mt-4 text-base font-semibold" asChild size={'lg'}>
-            <Link href={"/add-application"}>Get Started</Link>
+            <Link href={"/applications/new"}>Get Started</Link>
           </Button>
         </div>
 
