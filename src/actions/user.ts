@@ -8,6 +8,8 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 export async function getOrCreateUser() {
   const { userId } = await auth();
 
+  console.log(userId);
+
   if (!userId) throw new Error("User not authenticated");
 
   const user = await currentUser();
@@ -22,9 +24,35 @@ export async function getOrCreateUser() {
     },
   });
 
-  // if there is no user create user
-
   if (!dbUser) {
+    dbUser = await prisma.user.findUnique({
+      where: {
+        email: user.emailAddresses[0].emailAddress,
+      },
+    });
+  }
+
+  // if there is no user create user or update
+
+  // if (!dbUser) {
+  //   dbUser = await prisma.user.create({
+  //     data: {
+  //       clerkUserId: userId,
+  //       email: user.emailAddresses[0].emailAddress,
+  //       name: `${user.firstName || ""} ${user.lastName || ""}`.trim(),
+  //     },
+  //   });
+  // }
+
+  if (dbUser) {
+    dbUser = await prisma.user.update({
+      where: { id: dbUser.id },
+      data: {
+        clerkUserId: userId,
+        name: `${user.firstName || ""} ${user.lastName || ""}`.trim(),
+      },
+    });
+  } else {
     dbUser = await prisma.user.create({
       data: {
         clerkUserId: userId,
@@ -38,4 +66,3 @@ export async function getOrCreateUser() {
 
   return dbUser;
 }
-

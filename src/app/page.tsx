@@ -1,15 +1,8 @@
-import { getUserApplications } from "@/actions/applications";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 
 export default async function Home() {
-  // trying to get current user
-
-  const applications = await getUserApplications();
-
-  console.log(applications);
-
   return (
     <main>
       <section
@@ -30,7 +23,7 @@ export default async function Home() {
             step of the way.
           </p>
 
-          <Button className="mt-4 text-base font-semibold" asChild size={'lg'}>
+          <Button className="mt-4 text-base font-semibold" asChild size={"lg"}>
             <Link href={"/applications/new"}>Get Started</Link>
           </Button>
         </div>
