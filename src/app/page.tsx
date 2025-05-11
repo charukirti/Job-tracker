@@ -23,8 +23,19 @@ export default async function Home() {
             step of the way.
           </p>
 
-          <Button className="mt-4 text-base font-semibold" asChild size={"lg"}>
+          <Button
+            className="mt-4 mr-2 text-base font-semibold cursor-pointer"
+            asChild
+            size={"lg"}
+          >
             <Link href={"/applications/new"}>Get Started</Link>
+          </Button>
+          <Button
+            className="mt-4 text-base font-semibold cursor-pointer"
+            asChild
+            size={"lg"}
+          >
+            <Link href={"/dashboard"}>Your Jobs</Link>
           </Button>
         </div>
 
