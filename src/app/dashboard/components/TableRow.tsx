@@ -130,7 +130,7 @@ export default function TableRow({ application }: TableRowProps) {
                   window.open(application.jobUrl || "#", "_blank");
                 }}
               >
-                View
+                View Source
               </Button>
             ) : (
               <span className="text-gray-400 dark:text-gray-500 italic">
@@ -142,6 +142,7 @@ export default function TableRow({ application }: TableRowProps) {
               onClick={(e) => {
                 e.stopPropagation();
               }}
+              variant={"outline"}
             >
               Edit
             </Button>

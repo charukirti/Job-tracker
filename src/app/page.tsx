@@ -13,7 +13,7 @@ export default async function Home() {
           <h1 className="capitalize text-4xl md:text-7xl font-bold">
             <span className="text-primary dark:text-purple-400">
               effortless
-            </span>{" "}
+            </span>
             job management
           </h1>
 
@@ -34,6 +34,7 @@ export default async function Home() {
             className="mt-4 text-base font-semibold cursor-pointer"
             asChild
             size={"lg"}
+            variant="outline"
           >
             <Link href={"/dashboard"}>Your Jobs</Link>
           </Button>
