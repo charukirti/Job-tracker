@@ -6,7 +6,8 @@ import { Label } from "@/components/ui/label";
 import { BasicInfoInputs, basicInfoSchema } from "@/lib/formSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Status } from "@prisma/client";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
+import DateInput from "./DateInput";
 
 interface BasicInfoFormProps {
   onSubmit: (data: BasicInfoInputs) => void;
@@ -20,6 +21,7 @@ export default function BasicInfoForm({
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<BasicInfoInputs>({
     resolver: zodResolver(basicInfoSchema),
@@ -79,13 +81,19 @@ export default function BasicInfoForm({
 
       <div className="mb-4">
         <Label className="block mb-1 text-xl font-semibold">Date Applied</Label>
-        <Input
-          type="date"
-          className="w-full p-2 border rounded"
-          {...register("dateApplied", {
-            setValueAs: (value) => (value ? new Date(value) : new Date()),
-          })}
-          required
+        <Controller
+          name="dateApplied"
+          control={control}
+          render={({ field }) => (
+            <DateInput
+              value={field.value}
+              onChange={(dateStr) => {
+                field.onChange(dateStr ? new Date(dateStr) : new Date());
+              }}
+              name="dateApplied"
+              required
+            />
+          )}
         />
         {errors.dateApplied && (
           <p className="text-red-500 text-sm mt-1">

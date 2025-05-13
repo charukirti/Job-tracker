@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -10,7 +9,8 @@ import {
   InterviewStage,
 } from "@/lib/formSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
+import DateInput from "./DateInput";
 
 interface InterviewDetailsFormProps {
   onSubmit: (data: InterviewDetailsInputs) => void;
@@ -24,6 +24,7 @@ export default function InterviewDetailsForm({
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<InterviewDetailsInputs>({
     resolver: zodResolver(interviewDetailsSchema),
@@ -70,14 +71,26 @@ export default function InterviewDetailsForm({
           Next Interview Date
         </Label>
 
-        <Input
-          type="date"
-          className="w-full p-2 border rounded"
-          {...register("nextInterviewDate", {
-            setValueAs: (value) => (value ? new Date(value) : undefined),
-          })}
-          required
+        <Controller
+          name="nextInterviewDate"
+          control={control}
+          render={({ field }) => (
+            <DateInput
+              value={field.value}
+              onChange={(dateStr) => {
+                field.onChange(dateStr ? new Date(dateStr) : undefined);
+              }}
+              name="nextInterviewDate"
+              required
+            />
+          )}
         />
+        
+        {errors.nextInterviewDate && (
+          <p className="text-red-500 text-sm mt-1">
+            {errors.nextInterviewDate.message}
+          </p>
+        )}
       </div>
 
       <div className="mb-4">
