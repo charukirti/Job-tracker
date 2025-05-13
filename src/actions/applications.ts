@@ -72,7 +72,7 @@ export async function getUserApplications() {
 
   const applications = await prisma.application.findMany({
     where: {
-      userId:  dbUser.id,
+      userId: dbUser.id,
     },
     orderBy: {
       dateApplied: "desc",
@@ -80,4 +80,90 @@ export async function getUserApplications() {
   });
   console.log(applications);
   return applications;
+}
+
+export async function getApplicationById(id: string) {
+  const dbUser = getOrCreateUser();
+
+  const application = await prisma.application.findFirst({
+    where: {
+      id: id,
+      userId: (await dbUser).id,
+    },
+  });
+
+  return application;
+}
+
+// server action for updating application
+
+export async function updateApplication(formData: FormData) {
+  const dbUser = await getOrCreateUser();
+
+  const id = formData.get("id") as string;
+  const company = formData.get("company") as string;
+  const jobTitle = formData.get("jobTitle") as string;
+  const statusValue = (formData.get("status") as string) || "WISHLIST";
+  const dateApplied = formData.get("dateApplied") as string;
+  const notes = (formData.get("notes") as string) || "";
+  const jobUrl = (formData.get("jobUrl") as string) || "";
+  const location = (formData.get("location") as string) || "";
+
+  const remoteValue = formData.get("remote");
+  const remote = remoteValue === "true" || remoteValue == "on";
+
+  const salaryRange = (formData.get("salaryRange") as string) || "";
+
+  const nextInterviewDateStr = formData.get("interviewDate") as string;
+  const nextInterviewDate = nextInterviewDateStr
+    ? new Date(nextInterviewDateStr)
+    : null;
+
+  const interviewStageValue = formData.get("interviewStage") || "SCREENING";
+
+  const status = Object.values(Status).includes(statusValue as Status)
+    ? (statusValue as Status)
+    : ("WISHLIST" as Status);
+
+  const interviewStage = Object.values(InterviewStage).includes(
+    interviewStageValue as InterviewStage
+  )
+    ? (interviewStageValue as InterviewStage)
+    : ("SCREENING" as InterviewStage);
+
+  const existingApplication = await prisma.application.findFirst({
+    where: {
+      id: id,
+      userId: dbUser.id,
+    },
+  });
+
+  if (!existingApplication) {
+    throw new Error(
+      "Application not found, or you dont have permission to edit"
+    );
+  }
+
+  const updateApplication = await prisma.application.update({
+    where: {
+      id: id,
+    },
+    data: {
+      company,
+      jobTitle,
+      status,
+      dateApplied: dateApplied ? new Date(dateApplied) : new Date(),
+      notes,
+      jobUrl,
+      location,
+      remote,
+      salaryRange,
+      nextInterviewDate,
+      interviewStage,
+    },
+  });
+
+  console.log("Application updated", updateApplication);
+
+  redirect("/dashboard");
 }
