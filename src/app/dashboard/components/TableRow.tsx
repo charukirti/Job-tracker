@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Application } from "@/lib/types";
 import { useState } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
+import Link from "next/link";
 
 interface TableRowProps {
   application: Application;
@@ -144,7 +145,7 @@ export default function TableRow({ application }: TableRowProps) {
               }}
               variant={"outline"}
             >
-              Edit
+              <Link href={`/applications/edit/${application.id}`}>Edit</Link>
             </Button>
           </div>
         </td>

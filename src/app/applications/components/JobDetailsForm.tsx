@@ -63,7 +63,7 @@ export default function JobDetailsForm({
 
       <div className="mb-4">
         <label className="flex items-center text-xl font-semibold">
-          <input type="checkbox" className="mr-2" {...register("remote")} required/>
+          <input type="checkbox" className="mr-2" {...register("remote")} />
           Remote Position
         </label>
         {errors.remote && (
