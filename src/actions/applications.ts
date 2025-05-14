@@ -62,7 +62,7 @@ export async function addApplications(formData: FormData) {
 
   console.log(application);
 
-  redirect("/dashboard");
+  return {success: true}
 }
 
 // get all applications
@@ -95,7 +95,7 @@ export async function getApplicationById(id: string) {
   return application;
 }
 
-// server action for updating application
+//  updating existing application
 
 export async function updateApplication(formData: FormData) {
   const dbUser = await getOrCreateUser();
@@ -165,5 +165,36 @@ export async function updateApplication(formData: FormData) {
 
   console.log("Application updated", updateApplication);
 
-  redirect("/dashboard");
+  return { success: true };
+}
+
+// deleting application
+
+export async function deleteApplication(formData: FormData) {
+  const dbUser = await getOrCreateUser();
+
+  const id = formData.get("id") as string;
+
+  const existingApplication = await prisma.application.findFirst({
+    where: {
+      id: id,
+      userId: dbUser.id,
+    },
+  });
+
+  if (!existingApplication) {
+    throw new Error(
+      "Application not found, or you dont have access to delete it"
+    );
+  }
+
+  await prisma.application.delete({
+    where: {
+      id: id,
+    },
+  });
+
+  console.log("Application deleted", id);
+
+  return { success: true };
 }

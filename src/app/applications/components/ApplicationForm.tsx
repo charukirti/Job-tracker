@@ -12,12 +12,14 @@ import BasicInfoForm from "./BasicInfoForm";
 import JobDetailsForm from "./JobDetailsForm";
 import InterviewDetailsForm from "./InterviewDetailsForm";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 export default function ApplicationForm() {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<Partial<ApplicationInputs>>({});
   const [isPending, startTransition] = useTransition();
   const [formError, setFormError] = useState("");
+  const router = useRouter();
 
   const steps = ["Basic Info", "Job Details", "Interview Details"];
 
@@ -81,8 +83,10 @@ export default function ApplicationForm() {
 
         console.log("Form data submitted", updatedFormData);
 
-        await addApplications(formData);
-
+        const result = await addApplications(formData);
+        if (result.success) {
+          router.push("/dashboard");
+        }
         setFormData({});
         setCurrentStep(0);
       } catch (error) {

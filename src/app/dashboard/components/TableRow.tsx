@@ -3,8 +3,9 @@
 import { Button } from "@/components/ui/button";
 import { Application } from "@/lib/types";
 import { useState } from "react";
-import { ChevronDown, ChevronRight } from "lucide-react";
-import Link from "next/link";
+import { ChevronDown, ChevronRight, Globe, Trash, UserPen } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { deleteApplication } from "@/actions/applications";
 
 interface TableRowProps {
   application: Application;
@@ -12,6 +13,34 @@ interface TableRowProps {
 
 export default function TableRow({ application }: TableRowProps) {
   const [expanded, setExpanded] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const router = useRouter();
+
+  async function handleDelete(e: React.MouseEvent<HTMLButtonElement>) {
+    e.stopPropagation();
+
+    if (
+      window.confirm(
+        `Are you sure you want to delete the application for ${application.jobTitle} at ${application.company}?`
+      )
+    ) {
+      setIsDeleting(true);
+
+      const formData = new FormData();
+
+      formData.append("id", application.id);
+
+      try {
+        const result = await deleteApplication(formData);
+        if (result.success) {
+          router.push('/dashboard')
+        }
+      } catch {
+        setIsDeleting(false);
+        alert("failed to delete application, try again");
+      }
+    }
+  }
 
   return (
     <>
@@ -121,7 +150,7 @@ export default function TableRow({ application }: TableRowProps) {
           )}
         </td>
         <td className="px-6 py-4 whitespace-nowrap text-sm">
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2">
             {application.jobUrl ? (
               <Button
                 variant="link"
@@ -131,7 +160,7 @@ export default function TableRow({ application }: TableRowProps) {
                   window.open(application.jobUrl || "#", "_blank");
                 }}
               >
-                View Source
+                <Globe />
               </Button>
             ) : (
               <span className="text-gray-400 dark:text-gray-500 italic">
@@ -139,13 +168,22 @@ export default function TableRow({ application }: TableRowProps) {
               </span>
             )}
             <Button
-              className="text-indigo-600 cursor-pointer hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-gray-500 font-semibold transition-colors"
+              variant="link"
+              className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 cursor-pointer"
               onClick={(e) => {
                 e.stopPropagation();
+                router.push(`/applications/edit/${application.id}`);
               }}
-              variant={"outline"}
             >
-              <Link href={`/applications/edit/${application.id}`}>Edit</Link>
+              <UserPen />
+            </Button>
+            <Button
+              variant="link"
+              className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 cursor-pointer"
+              onClick={handleDelete}
+              disabled={isDeleting}
+            >
+              <Trash />
             </Button>
           </div>
         </td>

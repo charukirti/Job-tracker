@@ -15,6 +15,7 @@ import InterviewDetailsForm from "./InterviewDetailsForm";
 import JobDetailsForm from "./JobDetailsForm";
 import BasicInfoForm from "./BasicInfoForm";
 import { updateApplication } from "@/actions/applications";
+import { useRouter } from "next/navigation";
 
 interface EditApplicationFormProps {
   application: Application;
@@ -23,6 +24,7 @@ interface EditApplicationFormProps {
 export default function EditApplicationForm({
   application,
 }: EditApplicationFormProps) {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<Partial<ApplicationInputs>>({
     company: application.company,
@@ -64,12 +66,10 @@ export default function EditApplicationForm({
     const updatedFormData = { ...formData, ...data };
     setFormData(updatedFormData);
 
-    // final submission logic for update
     startTransition(async () => {
       try {
         const formData = new FormData();
 
-        // Set the application ID for update
         formData.append("id", application.id);
 
         // Basic info
@@ -108,7 +108,11 @@ export default function EditApplicationForm({
 
         console.log("Updated form data submitted", updatedFormData);
 
-        await updateApplication(formData);
+        const result = await updateApplication(formData);
+
+        if (result.success) {
+          router.push("/dashboard");
+        }
       } catch (error) {
         console.log("An error occurred", error);
         setFormError("Failed to update application. Please try again.");
