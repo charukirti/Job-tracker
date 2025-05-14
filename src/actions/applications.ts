@@ -62,7 +62,7 @@ export async function addApplications(formData: FormData) {
 
   console.log(application);
 
-  redirect("/");
+  redirect("/dashboard");
 }
 
 // get all applications
