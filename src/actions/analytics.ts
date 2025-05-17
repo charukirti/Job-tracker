@@ -4,11 +4,11 @@ import prisma from "@/lib/prisma";
 import { getOrCreateUser } from "./user";
 import { Status, InterviewStage } from "@prisma/client";
 
+const dbUser = await getOrCreateUser();
+
 //  Get overall application statistics for current user
 
 export async function getApplicationStats() {
-  const dbUser = await getOrCreateUser();
-
   const totalApplications = await prisma.application.count({
     where: { userId: dbUser.id },
   });
@@ -82,8 +82,6 @@ export async function getApplicationStats() {
 // Get count of applications grouped by status (e.g., APPLIED, OFFER)
 
 export async function getStatusDistribution() {
-  const dbUser = await getOrCreateUser();
-
   const statusCounts = await Promise.all(
     Object.values(Status).map(async (status) => {
       const count = await prisma.application.count({
@@ -102,8 +100,6 @@ export async function getStatusDistribution() {
 // Group applications by year-month for charting
 
 export async function getTimeBasedAnalytics() {
-  const dbUser = await getOrCreateUser();
-
   const applications = await prisma.application.findMany({
     where: {
       userId: dbUser.id,
@@ -144,8 +140,6 @@ export async function getTimeBasedAnalytics() {
 // Get analytics by interview stage
 
 export async function getInterviewStageAnalytics() {
-  const dbUser = await getOrCreateUser();
-
   const interviewStageCounts = await Promise.all(
     Object.values(InterviewStage).map(async (stage) => {
       const count = await prisma.application.count({
@@ -164,8 +158,6 @@ export async function getInterviewStageAnalytics() {
 // Get analytics data by location (remote/on-place)
 
 export async function getLocationAnalytics() {
-  const dbUser = await getOrCreateUser();
-
   const remoteWork = await prisma.application.count({
     where: {
       userId: dbUser.id,
@@ -221,8 +213,6 @@ export async function getLocationAnalytics() {
 
 // Get salary range analytics
 export async function getSalaryAnalytics() {
-  const dbUser = await getOrCreateUser();
-
   const applications = await prisma.application.findMany({
     where: {
       userId: dbUser.id,
