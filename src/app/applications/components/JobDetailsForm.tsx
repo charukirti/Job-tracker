@@ -39,7 +39,6 @@ export default function JobDetailsForm({
           type="text"
           className="w-full p-2 border rounded "
           {...register("jobUrl")}
-          required
         />
         {errors.jobUrl && (
           <p className="text-red-500 text-sm mt-1">{errors.jobUrl.message}</p>
@@ -54,7 +53,6 @@ export default function JobDetailsForm({
           type="text"
           className="w-full p-2 border rounded "
           {...register("location")}
-          required
         />
         {errors.location && (
           <p className="text-red-500 text-sm mt-1">{errors.location.message}</p>
@@ -72,13 +70,12 @@ export default function JobDetailsForm({
       </div>
 
       <div className="mb-4">
-        <Label className="block text-xl mb-1 font-semibold">Salary range</Label>
+        <Label className="block text-xl mb-1 font-semibold">Salary / stipend</Label>
         <Input
           type="text"
           className="w-full p-2 border rounded"
           placeholder="e.g $80,000 - $100,000"
           {...register("salaryRange")}
-          required
         />
       </div>
 

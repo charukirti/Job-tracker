@@ -45,7 +45,6 @@ export default function InterviewDetailsForm({
         <select
           className="w-full p-2 border rounded"
           {...register("interviewStage")}
-          required
         >
           <option value="">Select a stage</option>
           {Object.values(InterviewStage).map((stage) => (
@@ -81,7 +80,6 @@ export default function InterviewDetailsForm({
                 field.onChange(dateStr ? new Date(dateStr) : undefined);
               }}
               name="nextInterviewDate"
-              required
             />
           )}
         />
@@ -99,7 +97,6 @@ export default function InterviewDetailsForm({
           className="w-full p-2 border rounded h-32"
           placeholder="Add any important details or interview feedback here"
           {...register("notes")}
-          required
         ></Textarea>
       </div>
 
