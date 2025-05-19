@@ -34,7 +34,7 @@ export default function StatusChart({ data }: StatusCardProp) {
     }))
     .filter((item) => item.value > 0);
   return (
-    <Card className="col-span-1 md:col-span-2 mt-5">
+    <Card >
       <CardHeader>
         <CardTitle>Application Status</CardTitle>
       </CardHeader>

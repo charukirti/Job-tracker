@@ -9,14 +9,14 @@ export default function StatsCard({ stats }: StatsCardProps) {
     <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
       <Card>
         <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-sm font-medium">
+          <CardTitle className="text-sm lg:text-xl font-medium">
             Total Applications
           </CardTitle>
         </CardHeader>
 
         <CardContent>
           <div className="text-2xl font-bold">{stats.totalApplications} </div>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-right text-muted-foreground">
             {stats.activeApplications} Currently active
           </p>
         </CardContent>
@@ -24,14 +24,14 @@ export default function StatsCard({ stats }: StatsCardProps) {
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-sm font-medium">Success Rate</CardTitle>
+          <CardTitle className="text-sm lg:text-xl font-medium">Success Rate</CardTitle>
         </CardHeader>
 
         <CardContent>
           <div className="text-2xl font-bold">
             {stats.successRate.toFixed(1)}%
           </div>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-right text-muted-foreground">
             {stats.offersReceived} offers received
           </p>
         </CardContent>
@@ -39,13 +39,13 @@ export default function StatsCard({ stats }: StatsCardProps) {
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-sm font-medium">Response Rate</CardTitle>
+          <CardTitle className="text-sm lg:text-xl font-medium">Response Rate</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
             {(100 - stats.rejectionRate).toFixed(1)}%
           </div>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-right text-muted-foreground">
             {stats.rejections} rejections
           </p>
         </CardContent>
