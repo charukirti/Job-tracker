@@ -20,8 +20,8 @@ export function useTableSort(application: Application[]) {
     const sorted = [...application];
 
     sorted.sort((a, b) => {
-      let valueOne: any;
-      let valueTwo: any;
+      let valueOne: string | number;
+      let valueTwo: string | number;
 
       switch (sortField) {
         case "jobTitle":
@@ -41,7 +41,7 @@ export function useTableSort(application: Application[]) {
           valueTwo = b.nextInterviewDate?.getTime() || 0;
           break;
         case "salaryRange":
-          const extract = (range: string | null) => {
+          const extract = (range: string | null): number => {
             if (!range) return 0;
             const numbers = range.match(/\d+/g);
             return numbers ? parseInt(numbers[0]) : 0;

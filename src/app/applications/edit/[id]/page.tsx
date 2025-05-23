@@ -3,13 +3,13 @@ import { notFound } from "next/navigation";
 import EditApplicationForm from "../../components/EditApplicationForm";
 
 interface PageProps {
-  params: {
+  params:  Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function EditApplication({ params }: PageProps) {
-  const id = params.id;
+  const {id} = await params;
 
   const application = await getApplicationById(id);
 

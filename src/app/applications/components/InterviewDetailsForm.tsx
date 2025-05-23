@@ -15,11 +15,13 @@ import DateInput from "./DateInput";
 interface InterviewDetailsFormProps {
   onSubmit: (data: InterviewDetailsInputs) => void;
   defaultValues: Partial<InterviewDetailsInputs>;
+  isPending?: boolean
 }
 
 export default function InterviewDetailsForm({
   onSubmit,
   defaultValues,
+  isPending
 }: InterviewDetailsFormProps) {
   const {
     register,
@@ -104,6 +106,7 @@ export default function InterviewDetailsForm({
         <Button
           className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-base font-semibold cursor-pointer"
           type="submit"
+          disabled={isPending}
         >
           Add Application
         </Button>

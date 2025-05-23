@@ -27,8 +27,15 @@ const INTERVIEW_COLORS = {
   COMPLETED: "#14b8a6",
 };
 
+type InterviewStage = keyof typeof INTERVIEW_COLORS;
+
+interface InterviewStageData {
+  stage: InterviewStage;
+  count: number;
+}
+
 interface InterviewStageProp {
-  data: any[];
+  data: InterviewStageData[];
 }
 
 const formatInterviewStage = (stage: string) => {

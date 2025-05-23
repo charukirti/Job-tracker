@@ -147,6 +147,7 @@ export default function EditApplicationForm({
           <InterviewDetailsForm
             onSubmit={handleInterviewDetailsSubmit}
             defaultValues={formData}
+            isPending={isPending}
           />
         );
     }

@@ -3,7 +3,6 @@
 import prisma from "@/lib/prisma";
 import { getOrCreateUser } from "./user";
 import { InterviewStage, Status } from "@prisma/client";
-import { redirect } from "next/navigation";
 
 // newly add applications
 

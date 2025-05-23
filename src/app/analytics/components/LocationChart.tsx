@@ -19,8 +19,13 @@ import {
   YAxis,
 } from "recharts";
 
+interface LocationData {
+  location: string;
+  count: number;
+}
+
 interface LocationChartProp {
-  data: any[];
+  data: LocationData[];
 }
 
 const LOCATION_COLORS = [

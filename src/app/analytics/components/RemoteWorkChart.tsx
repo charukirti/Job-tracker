@@ -16,10 +16,14 @@ import {
   Tooltip,
 } from "recharts";
 
-interface RemoteworkChartProps {
-  data: any[];
+interface RemoteWorkData {
+  type: string;
+  count: number;
 }
 
+interface RemoteworkChartProps {
+  data: RemoteWorkData[];
+}
 export default function RemoteWorkChart({ data }: RemoteworkChartProps) {
   const chartData = data
     .map((item, index) => ({

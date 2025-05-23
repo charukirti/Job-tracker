@@ -1,9 +1,18 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-interface StatsCardProps {
-  stats: any;
+interface StatsData {
+  totalApplications: number;
+  activeApplications: number;
+  successRate: number;
+  offersReceived: number;
+  rejectionRate: number;
+  rejections: number;
+  averageResponseTime: number;
 }
 
+interface StatsCardProps {
+  stats: StatsData;
+}
 export default function StatsCard({ stats }: StatsCardProps) {
   return (
     <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">

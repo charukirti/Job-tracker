@@ -6,8 +6,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+interface SalaryData {
+  averageMinSalary: number;
+  averageMaxSalary: number;
+}
+
 interface SalaryOverviewCardProp {
-  data: any;
+  data: SalaryData;
 }
 
 export default function SalaryOverviewCard({ data }: SalaryOverviewCardProp) {

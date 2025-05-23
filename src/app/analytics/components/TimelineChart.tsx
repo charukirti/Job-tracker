@@ -18,8 +18,13 @@ import {
   YAxis,
 } from "recharts";
 
+interface TimelineData {
+  month: string;
+  count: number;
+}
+
 interface TimelineChartProps {
-  data: any[];
+  data: TimelineData[];
 }
 
 export default function TimelineChart({ data }: TimelineChartProps) {

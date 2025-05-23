@@ -123,6 +123,7 @@ export default function ApplicationForm() {
           <InterviewDetailsForm
             onSubmit={handleInterviewDetailsSubmit}
             defaultValues={formData}
+            isPending={isPending}
           />
         );
     }

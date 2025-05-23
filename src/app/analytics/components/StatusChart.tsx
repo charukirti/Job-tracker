@@ -18,8 +18,15 @@ const STATUS_COLORS = {
   ACCEPTED: "#8b5cf6",
 };
 
+type StatusType = keyof typeof STATUS_COLORS;
+
+interface StatusData {
+  status: StatusType;
+  count: number;
+}
+
 interface StatusCardProp {
-  data: any[];
+  data: StatusData[];
 }
 const formatStatus = (status: string) => {
   return status.charAt(0) + status.slice(1).toLowerCase().replace("_", " ");
