@@ -7,12 +7,12 @@ export default async function Applications() {
   const applications = await getUserApplications();
   return (
     <section className="mt-5">
-      <header className="flex items-center justify-between mb-5">
+      <header className="flex flex-col md:flex-row gap-4 items-center justify-between mb-5">
         <div>
           <h1 className="text-3xl font-bold">Applications Dashboard</h1>
-          <p className="text-lg">All your applied jobs will be visible here</p>
+          <p className="text-sm text-center md:text-left">All your applied jobs will be visible here</p>
         </div>
-        <Button>
+        <Button className="dark:bg-gray-700 dark:text-white">
           <Link href={"/applications/new"}>Add New Application</Link>
         </Button>
       </header>

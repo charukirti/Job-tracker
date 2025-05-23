@@ -6,18 +6,18 @@ export default async function Home() {
   return (
     <main>
       <section
-        className="max-w-6xl mx-auto sm:px-8 h-screen -mt-20 grid lg:grid-cols-[1fr_600px] gap-3
+        className="max-w-6xl mx-auto sm:px-8 h-screen mt-10 grid lg:grid-cols-[1fr_600px] gap-5
  items-center"
       >
-        <div>
+        <div className="text-center md:text-left">
           <h1 className="capitalize text-4xl md:text-7xl font-bold">
-            <span className="text-primary dark:text-purple-400">
+            <span className="text-primary dark:text-purple-400 mr-2">
               effortless
             </span>
             job management
           </h1>
 
-          <p className="leading-loose max-w-md mt-4">
+          <p className="mx-8 md:mx-0 mt-4">
             Take control of your job search with our easy to use app that helps
             you manage applications, track progress, and stay organized every
             step of the way.
