@@ -1,12 +1,5 @@
 "use client";
 
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  SignUpButton,
-  UserButton,
-} from "@clerk/nextjs";
 import { ModeToggle } from "../toggler";
 import { Button } from "../ui/button";
 import Link from "next/link";
@@ -90,24 +83,7 @@ export default function Header() {
             </Sheet>
           </div>
 
-          <SignedOut>
-            <SignInButton>
-              <Button variant="default" className="text-sm md:text-base">
-                Sign In
-              </Button>
-            </SignInButton>
-
-            <SignUpButton>
-              <Button variant="outline" className="text-sm md:text-base">
-                Sign Up
-              </Button>
-            </SignUpButton>
-          </SignedOut>
-
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
-
+          
           <ModeToggle />
         </nav>
       </div>

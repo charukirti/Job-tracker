@@ -1,14 +1,11 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { getOrCreateUser } from "./user";
 import { InterviewStage, Status } from "@prisma/client";
 
 // newly add applications
 
 export async function addApplications(formData: FormData) {
-  const dbUser = await getOrCreateUser();
-
   const company = formData.get("company") as string;
   const jobTitle = formData.get("jobTitle") as string;
   const statusValue = (formData.get("status") as string) || "WISHLIST";
@@ -52,10 +49,6 @@ export async function addApplications(formData: FormData) {
       salaryRange,
       nextInterviewDate,
       interviewStage,
-
-      user: {
-        connect: { id: dbUser.id },
-      },
     },
   });
 
@@ -67,12 +60,7 @@ export async function addApplications(formData: FormData) {
 // get all applications
 
 export async function getUserApplications() {
-  const dbUser = await getOrCreateUser();
-
   const applications = await prisma.application.findMany({
-    where: {
-      userId: dbUser.id,
-    },
     orderBy: {
       dateApplied: "desc",
     },
@@ -82,12 +70,9 @@ export async function getUserApplications() {
 }
 
 export async function getApplicationById(id: string) {
-  const dbUser = getOrCreateUser();
-
   const application = await prisma.application.findFirst({
     where: {
       id: id,
-      userId: (await dbUser).id,
     },
   });
 
@@ -97,8 +82,6 @@ export async function getApplicationById(id: string) {
 //  updating existing application
 
 export async function updateApplication(formData: FormData) {
-  const dbUser = await getOrCreateUser();
-
   const id = formData.get("id") as string;
   const company = formData.get("company") as string;
   const jobTitle = formData.get("jobTitle") as string;
@@ -133,17 +116,14 @@ export async function updateApplication(formData: FormData) {
   const existingApplication = await prisma.application.findFirst({
     where: {
       id: id,
-      userId: dbUser.id,
     },
   });
 
   if (!existingApplication) {
-    throw new Error(
-      "Application not found, or you dont have permission to edit"
-    );
+    throw new Error("Application not found");
   }
 
-  const updateApplication = await prisma.application.update({
+  const updatedApplication = await prisma.application.update({
     where: {
       id: id,
     },
@@ -162,7 +142,7 @@ export async function updateApplication(formData: FormData) {
     },
   });
 
-  console.log("Application updated", updateApplication);
+  console.log("Application updated", updatedApplication);
 
   return { success: true };
 }
@@ -170,21 +150,16 @@ export async function updateApplication(formData: FormData) {
 // deleting application
 
 export async function deleteApplication(formData: FormData) {
-  const dbUser = await getOrCreateUser();
-
   const id = formData.get("id") as string;
 
   const existingApplication = await prisma.application.findFirst({
     where: {
       id: id,
-      userId: dbUser.id,
     },
   });
 
   if (!existingApplication) {
-    throw new Error(
-      "Application not found, or you dont have access to delete it"
-    );
+    throw new Error("Application not found");
   }
 
   await prisma.application.delete({

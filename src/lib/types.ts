@@ -13,7 +13,6 @@ export type Application = {
   salaryRange: string | null;
   nextInterviewDate: Date | null;
   interviewStage: $Enums.InterviewStage | null;
-  userId: string;
   createdAt: Date;
   updatedAt: Date;
 };

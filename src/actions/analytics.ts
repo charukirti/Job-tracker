@@ -1,42 +1,33 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { getOrCreateUser } from "./user";
 import { Status, InterviewStage } from "@prisma/client";
 
-
-//  Get overall application statistics for current user
+//  Get overall application statistics
 
 export async function getApplicationStats() {
-  const dbUser = await getOrCreateUser();
-  const totalApplications = await prisma.application.count({
-    where: { userId: dbUser.id },
-  });
+  const totalApplications = await prisma.application.count();
 
   const activeApplications = await prisma.application.count({
     where: {
-      userId: dbUser.id,
       status: { notIn: ["REJECTED", "ACCEPTED"] },
     },
   });
 
   const successRate = await prisma.application.findMany({
     where: {
-      userId: dbUser.id,
       status: { in: ["OFFER", "ACCEPTED"] },
     },
   });
 
   const rejectionRate = await prisma.application.findMany({
     where: {
-      userId: dbUser.id,
       status: "REJECTED",
     },
   });
 
   const applicationWithInterviews = await prisma.application.findMany({
     where: {
-      userId: dbUser.id,
       status: { in: ["INTERVIEW", "OFFER", "REJECTED", "ACCEPTED"] },
     },
     select: {
@@ -82,12 +73,10 @@ export async function getApplicationStats() {
 // Get count of applications grouped by status (e.g., APPLIED, OFFER)
 
 export async function getStatusDistribution() {
-  const dbUser = await getOrCreateUser();
   const statusCounts = await Promise.all(
     Object.values(Status).map(async (status) => {
       const count = await prisma.application.count({
         where: {
-          userId: dbUser.id,
           status: status,
         },
       });
@@ -101,11 +90,7 @@ export async function getStatusDistribution() {
 // Group applications by year-month for charting
 
 export async function getTimeBasedAnalytics() {
-  const dbUser = await getOrCreateUser();
   const applications = await prisma.application.findMany({
-    where: {
-      userId: dbUser.id,
-    },
     select: {
       dateApplied: true,
     },
@@ -142,12 +127,10 @@ export async function getTimeBasedAnalytics() {
 // Get analytics by interview stage
 
 export async function getInterviewStageAnalytics() {
-  const dbUser = await getOrCreateUser();
   const interviewStageCounts = await Promise.all(
     Object.values(InterviewStage).map(async (stage) => {
       const count = await prisma.application.count({
         where: {
-          userId: dbUser.id,
           interviewStage: stage,
         },
       });
@@ -161,30 +144,25 @@ export async function getInterviewStageAnalytics() {
 // Get analytics data by location (remote/on-place)
 
 export async function getLocationAnalytics() {
-  const dbUser = await getOrCreateUser();
   const remoteWork = await prisma.application.count({
     where: {
-      userId: dbUser.id,
       remote: true,
     },
   });
 
   const onPlaceWork = await prisma.application.count({
     where: {
-      userId: dbUser.id,
       remote: false,
     },
   });
 
   const notSpecifiedLocation = await prisma.application.count({
     where: {
-      userId: dbUser.id,
       remote: null,
     },
   });
 
   const applications = await prisma.application.findMany({
-    where: { userId: dbUser.id },
     select: {
       location: true,
     },
@@ -217,10 +195,8 @@ export async function getLocationAnalytics() {
 
 // Get salary range analytics
 export async function getSalaryAnalytics() {
-  const dbUser = await getOrCreateUser();
   const applications = await prisma.application.findMany({
     where: {
-      userId: dbUser.id,
       salaryRange: { not: "" },
     },
     select: {
