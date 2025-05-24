@@ -13,6 +13,7 @@ import JobDetailsForm from "./JobDetailsForm";
 import InterviewDetailsForm from "./InterviewDetailsForm";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { User, Briefcase, MessageCircle } from "lucide-react";
 
 export default function ApplicationForm() {
   const [currentStep, setCurrentStep] = useState(0);
@@ -21,7 +22,11 @@ export default function ApplicationForm() {
   const [formError, setFormError] = useState("");
   const router = useRouter();
 
-  const steps = ["Basic Info", "Job Details", "Interview Details"];
+  const steps = [
+    { name: "Basic Info", icon: User },
+    { name: "Job Details", icon: Briefcase }, 
+    { name: "Interview Details", icon: MessageCircle }
+  ];
 
   const handleBasicInfoSubmit = (data: BasicInfoInputs) => {
     const updatedFormData = { ...formData, ...data };
@@ -134,10 +139,10 @@ export default function ApplicationForm() {
       <h2 className="text-2xl font-bold mb-6">Add Job Application</h2>
 
       <div className="mb-6">
-        <ol className="flex justify-between">
+        <ol className="flex justify-around gap-8">
           {steps.map((step, index) => (
             <li
-              key={step}
+              key={step.name}
               className={`flex items-center text-xl font-semibold ${
                 index <= currentStep ? "text-blue-600" : "text-gray-400"
               }`}
@@ -149,7 +154,7 @@ export default function ApplicationForm() {
               >
                 {index + 1}
               </span>
-              <span>{step}</span>
+              <span title={step.name}>{<step.icon/>}</span>
             </li>
           ))}
         </ol>
