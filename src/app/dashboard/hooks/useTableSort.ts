@@ -33,13 +33,21 @@ export function useTableSort(application: Application[]) {
           valueTwo = b.company.toLowerCase();
           break;
         case "dateApplied":
-          valueOne = a.dateApplied.getTime();
-          valueTwo = b.dateApplied.getTime();
+          const dateA = a.dateApplied instanceof Date ? a.dateApplied : new Date(a.dateApplied);
+          const dateB = b.dateApplied instanceof Date ? b.dateApplied : new Date(b.dateApplied);
+          valueOne = dateA.getTime();
+          valueTwo = dateB.getTime();
           break;
         case "nextInterviewDate":
-          valueOne = a.nextInterviewDate?.getTime() || 0;
-          valueTwo = b.nextInterviewDate?.getTime() || 0;
-          break;
+          const nextDateA = a.nextInterviewDate 
+          ? (a.nextInterviewDate instanceof Date ? a.nextInterviewDate : new Date(a.nextInterviewDate))
+          : null;
+        const nextDateB = b.nextInterviewDate 
+          ? (b.nextInterviewDate instanceof Date ? b.nextInterviewDate : new Date(b.nextInterviewDate))
+          : null;
+        valueOne = nextDateA?.getTime() || 0;
+        valueTwo = nextDateB?.getTime() || 0;
+        break;
         case "salaryRange":
           const extract = (range: string | null): number => {
             if (!range) return 0;
