@@ -106,12 +106,12 @@ export default function TableRow({ application }: TableRowProps) {
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
           <div className="text-sm text-gray-500 dark:text-gray-400">
-            Applied: {application.dateApplied.toLocaleDateString()}
+            Applied: {new Date(application.dateApplied).toLocaleDateString()}
           </div>
           {application.nextInterviewDate &&
             application.status !== "REJECTED" && (
               <div className="text-sm text-gray-500 dark:text-gray-400">
-                Next Round: {application.nextInterviewDate.toLocaleDateString()}
+                Next Round: {new Date(application.nextInterviewDate).toLocaleDateString()}
               </div>
             )}
         </td>

@@ -2,6 +2,40 @@
 
 import prisma from "@/lib/prisma";
 import { InterviewStage, Status } from "@prisma/client";
+import { revalidatePath, revalidateTag, unstable_cache } from "next/cache";
+
+const getCachedApplications = unstable_cache(
+  async () => {
+    console.log("Fetching applications from database...");
+    const applications = await prisma.application.findMany({
+      orderBy: {
+        dateApplied: "desc",
+      },
+    });
+    return applications;
+  },
+  ["user-applications"],
+  {
+    tags: ["applications"],
+    revalidate: 60,
+  }
+);
+
+const getCachedApplicationByID = unstable_cache(
+  async (id: string) => {
+    console.log("getting application by id (cached)");
+
+    const application = await prisma.application.findFirst({
+      where: { id },
+    });
+    return application;
+  },
+  [],
+  {
+    tags: ["applications"],
+    revalidate: 60,
+  }
+);
 
 // newly add applications
 
@@ -53,30 +87,21 @@ export async function addApplications(formData: FormData) {
   });
 
   console.log(application);
-
-  return {success: true}
+  revalidateTag("applications");
+  revalidatePath("/dashboard");
+  return { success: true };
 }
 
 // get all applications
 
 export async function getUserApplications() {
-  const applications = await prisma.application.findMany({
-    orderBy: {
-      dateApplied: "desc",
-    },
-  });
-  console.log(applications);
-  return applications;
+  return await getCachedApplications();
 }
 
-export async function getApplicationById(id: string) {
-  const application = await prisma.application.findFirst({
-    where: {
-      id: id,
-    },
-  });
+// get application with id (not implemented cacheing)
 
-  return application;
+export async function getApplicationById(id: string) {
+  return await getCachedApplicationByID(id);
 }
 
 //  updating existing application
@@ -144,6 +169,9 @@ export async function updateApplication(formData: FormData) {
 
   console.log("Application updated", updatedApplication);
 
+  revalidateTag("applications");
+  revalidatePath("/dashboard");
+
   return { success: true };
 }
 
@@ -169,6 +197,9 @@ export async function deleteApplication(formData: FormData) {
   });
 
   console.log("Application deleted", id);
+
+  revalidateTag("applications");
+  revalidatePath("/dashboard");
 
   return { success: true };
 }
