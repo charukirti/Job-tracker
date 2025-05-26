@@ -1,4 +1,4 @@
-import { getAllAnalyticsData } from "@/actions/analytics";
+import {  getCachedAnalyticsData } from "@/actions/analytics";
 import StatsCard from "./StatsCard";
 import StatusChart from "./StatusChart";
 import InterviewStageChart from "./InterviewStageChart";
@@ -13,7 +13,7 @@ export async function Analytics() {
     interviewStageData,
     locationData,
     salaryData,
-  } = await getAllAnalyticsData();
+  } = await getCachedAnalyticsData();
   return (
     <main className="container mx-auto py-10 space-y-8">
       <div>

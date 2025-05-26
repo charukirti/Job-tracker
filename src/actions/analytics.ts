@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { Status, InterviewStage } from "@prisma/client";
+import { unstable_cache } from "next/cache";
 
 //  Get overall application statistics
 
@@ -310,20 +311,45 @@ export async function getSalaryAnalytics() {
   };
 }
 
-export async function getAllAnalyticsData() {
-  const stats = await getApplicationStats();
-  const statusDistribution = await getStatusDistribution();
-  const timelineData = await getTimeBasedAnalytics();
-  const interviewStageData = await getInterviewStageAnalytics();
-  const locationData = await getLocationAnalytics();
-  const salaryData = await getSalaryAnalytics();
+// export async function getAllAnalyticsData() {
+//   const stats = await getApplicationStats();
+//   const statusDistribution = await getStatusDistribution();
+//   const timelineData = await getTimeBasedAnalytics();
+//   const interviewStageData = await getInterviewStageAnalytics();
+//   const locationData = await getLocationAnalytics();
+//   const salaryData = await getSalaryAnalytics();
 
-  return {
-    stats,
-    statusDistribution,
-    timelineData,
-    interviewStageData,
-    locationData,
-    salaryData,
-  };
-}
+//   return {
+//     stats,
+//     statusDistribution,
+//     timelineData,
+//     interviewStageData,
+//     locationData,
+//     salaryData,
+//   };
+// }
+
+export const getCachedAnalyticsData = unstable_cache(
+  async () => {
+    const stats = await getApplicationStats();
+    const statusDistribution = await getStatusDistribution();
+    const timelineData = await getTimeBasedAnalytics();
+    const interviewStageData = await getInterviewStageAnalytics();
+    const locationData = await getLocationAnalytics();
+    const salaryData = await getSalaryAnalytics();
+
+    return {
+      stats,
+      statusDistribution,
+      timelineData,
+      interviewStageData,
+      locationData,
+      salaryData,
+    };
+  },
+  ["analytics-data"],
+  {
+    tags: ["analytics"],
+    revalidate: 60,
+  }
+);

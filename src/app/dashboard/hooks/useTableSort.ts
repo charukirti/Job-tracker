@@ -59,8 +59,10 @@ export function useTableSort(application: Application[]) {
           valueTwo = extract(b.salaryRange);
           break;
         default:
-          valueOne = a.dateApplied.getTime();
-          valueTwo = b.dateApplied.getTime();
+          const defaultDateA = a.dateApplied instanceof Date ? a.dateApplied : new Date(a.dateApplied);
+          const defaultDateB = b.dateApplied instanceof Date ? b.dateApplied : new Date(b.dateApplied);
+          valueOne = defaultDateA.getTime();
+          valueTwo = defaultDateB.getTime();
       }
 
       if (sortOrder === "asc") {
